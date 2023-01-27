@@ -86,14 +86,52 @@ class Rectangle(MainBlock):
 	def rotate(self):
 		if self.direction == 1:
 			x = self.positions[2][0]
-			for index, pos in enumerate(self.positions):
-				self.positions[index] = [x, pos[1] + index]
+			self.positions[0] = [x, self.positions[0][1] - 2]
+			self.positions[1] = [x, self.positions[1][1] - 1]
+			self.positions[2] = [x, self.positions[2][1]]
+			self.positions[3] = [x, self.positions[3][1] + 1]
 			self.direction = 2
 		elif self.direction == 2:
-			y = self.positions[2][1]
-			for index, pos in enumerate(self.positions):
-				if index < 2:
-					self.positions[index] = [pos[0] - index, y]
-				else:
-					self.positions[index] = [pos[0] + index - 1, y]
+			x, y = self.positions[2]
+			if x + 1 == WIDTH:
+				self.positions[0] = [x - 3, y]
+				self.positions[1] = [x - 2, y] 
+				self.positions[2] = [x - 1, y]
+				self.positions[3] = [x, y]
+			elif x == 0:
+				self.positions[0] = [x, y]
+				self.positions[1] = [x + 1, y] 
+				self.positions[2] = [x + 2, y]
+				self.positions[3] = [x + 3, y]
+			else:
+				self.positions[0] = [x - 2, y]
+				self.positions[1] = [x - 1, y] 
+				self.positions[2] = [x, y]
+				self.positions[3] = [x + 1, y]
 			self.direction = 3
+		elif self.direction == 3:
+			x = self.positions[1][0]
+			self.positions[0] = [x, self.positions[0][1] - 1]
+			self.positions[1] = [x, self.positions[1][1]]
+			self.positions[2] = [x, self.positions[2][1] + 1]
+			self.positions[3] = [x, self.positions[3][1] + 2]
+			self.direction = 4
+		elif self.direction == 4:
+			x, y = self.positions[1]
+			if x + 1 == WIDTH:
+				self.positions[0] = [x - 3, y]
+				self.positions[1] = [x - 2, y] 
+				self.positions[2] = [x - 1, y]
+				self.positions[3] = [x, y]
+			elif x == 0:
+				self.positions[0] = [x, y]
+				self.positions[1] = [x + 1, y] 
+				self.positions[2] = [x + 2, y]
+				self.positions[3] = [x + 3, y]
+			else:
+				self.positions[0] = [x - 1, y]
+				self.positions[1] = [x, y] 
+				self.positions[2] = [x + 1, y]
+				self.positions[3] = [x + 2, y]
+			self.direction = 1
+		# print("---->", self.positions)

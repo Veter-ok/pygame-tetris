@@ -30,8 +30,6 @@ if __name__ == '__main__':
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				running = False
-			if event.type == pygame.MOUSEBUTTONDOWN:
-				print(board.get_cell(event.pos))
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_RIGHT:
 					block.move("RIGHT")
@@ -49,6 +47,7 @@ if __name__ == '__main__':
 		if block.isFall(board.minPoint(block_positions)):
 			board.add_block(block_positions, block.get_color())
 			block = choice(blocks)(choice(colors))
+			board.update()
 		block.render(screen)
 		board.render(screen)
 		pygame.display.flip()
