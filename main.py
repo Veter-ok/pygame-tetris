@@ -1,7 +1,7 @@
 import pygame
 from random import choice
 from board import Board
-from blocks import Cube, Rectangle
+from blocks import Cube, Rectangle, L_Block
 
 class TimeChecker():
 	def __init__(self):
@@ -18,7 +18,7 @@ class TimeChecker():
 
 if __name__ == '__main__':
 	colors = ["red", "green", "yellow"]
-	blocks = [Cube, Rectangle]
+	blocks = [Cube, Rectangle, L_Block]
 	block = choice(blocks)(choice(colors))
 	pygame.init()
 	screen = pygame.display.set_mode((450, 720))
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 		if speedChecker.check_time(tick):
 			block.fall()
 		block_positions = block.get_positions()
-		if block.isFall(board.minPoint(block_positions)):
+		if block.isFall(board.minPoints(block_positions)):
 			board.add_block(block_positions, block.get_color())
 			block = choice(blocks)(choice(colors))
 			board.update()

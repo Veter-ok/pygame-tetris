@@ -8,7 +8,7 @@ def boardPosToPixels(pos):
 
 
 class Board():
-	def __init__(self, width, height):
+	def __init__(self, width:int, height:int):
 		self.width = width
 		self.height = height
 		self.board = [[0] * width for _ in range(height)]
@@ -18,12 +18,12 @@ class Board():
 		self.top = MARGIN_TOP
 		self.cell_size = CELL_SIZE
 
-	def set_view(self, left, top, cell_size):
+	def set_view(self, left:int, top:int, cell_size:int):
 		self.left = left
 		self.top = top
 		self.cell_size = cell_size
 
-	def get_cell(self, mouse_pos):
+	def get_cell(self, mouse_pos:tuple) -> None | type:
 		x, y = mouse_pos
 		x -= self.left
 		y -= self.top
@@ -55,22 +55,24 @@ class Board():
 				index -= 1
 
 					
-	def add_block(self, postions, color):
+	def add_block(self, postions:tuple, color:tuple | str):
 		for postion in postions:
 			x, y = postion
 			self.board[y][x] = 1
 			self.board_colors[y][x] = color
 	
-	def minPoint(self, postions):
+	def minPoints(self, postions: list[tuple]) -> list[int]:
 		min_points = []
-		for y in range(self.height):
-			for pos in postions:
-				if self.board[y][pos[0]] == 1:
-					min_points.append(y)
-		if len(min_points) == 0:
-			return self.height - 1
-		return min(min_points) - 1
+		for postion in postions:
+			x, y = postion
+			for new_y in range(y, self.height):
+				if self.board[new_y][x] == 1:
+					min_points.append(new_y - 1)
+					break
+				if new_y == self.height - 1:
+					min_points.append(new_y)
+		return min_points
 	
-	def fill_cell(self, screen, pos, color):
+	def fill_cell(self, screen, pos:type, color:str | tuple):
 		pos = boardPosToPixels(pos)
 		pygame.draw.rect(screen, color, (pos[0], pos[1], CELL_SIZE, CELL_SIZE))
