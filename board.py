@@ -50,7 +50,7 @@ class Board():
 					full_row = y
 					break
 			index = full_row
-			while index != 0:
+			while index >= 0:
 				self.board[index] = self.board[index - 1].copy()
 				index -= 1
 
