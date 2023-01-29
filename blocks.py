@@ -70,8 +70,10 @@ class MainBlock():
 
 
 class Cube(MainBlock):
-	def __init__(self, color:str): 
-		super().__init__(color)
+	color = (242, 240, 0)
+
+	def __init__(self): 
+		super().__init__(Cube.color)
 		self.positions = [(3, 0), (4, 0), (3, 1), (4, 1)]
 
 	def rotate(self):
@@ -79,8 +81,10 @@ class Cube(MainBlock):
 
 
 class Rectangle(MainBlock):
-	def __init__(self, color:str):
-		super().__init__(color) 
+	color = (4, 241, 229)
+
+	def __init__(self):
+		super().__init__(Rectangle.color) 
 		self.positions = [(3, 0), (4, 0), (5, 0), (6, 0)]
 		self.direction = 1
 
@@ -137,9 +141,11 @@ class Rectangle(MainBlock):
 			self.direction = 1
 
 
-class L_Block(MainBlock):
-	def __init__(self, color: str):
-		super().__init__(color)
+class L_Block_1(MainBlock):
+	color = (26, 0, 217)
+
+	def __init__(self):
+		super().__init__(L_Block_1.color)
 		self.positions = [(3, 0), (3, 1), (4, 1), (5, 1)]
 		self.direction = 1
 	

@@ -1,30 +1,15 @@
 import pygame
-from random import choice
+from constants import WIDTH, HEIGHT
 from board import Board
-from blocks import Cube, Rectangle, L_Block
-
-class TimeChecker():
-	def __init__(self):
-		self.prev_tick = 0
-		self.sum_tick = 0
-
-	def check_time(self, tick):
-		if  (tick + self.sum_tick) - self.prev_tick >= 1000:
-			self.prev_tick = 0
-			self.sum_tick = 0
-			return True
-		self.sum_tick += tick
-		return False
+from tools import get_block, TimeChecker, FPS
 
 if __name__ == '__main__':
-	colors = ["red", "green", "yellow"]
-	blocks = [Cube, Rectangle, L_Block]
-	block = choice(blocks)(choice(colors))
 	pygame.init()
 	screen = pygame.display.set_mode((450, 720))
-	clock = pygame.time.Clock()
-	board = Board(10, 20)
+	board = Board(WIDTH, HEIGHT)
+	block = get_block()
 	speedChecker = TimeChecker()
+	fps = FPS()
 	running = True
 	while running:
 		for event in pygame.event.get():
@@ -40,15 +25,16 @@ if __name__ == '__main__':
 				elif event.key == pygame.K_UP:
 					block.rotate()
 		screen.fill("black")
-		tick = clock.tick()
-		if speedChecker.check_time(tick):
+		if speedChecker.check_time():
 			block.fall()
 		block_positions = block.get_positions()
 		if block.isFall(board.minPoints(block_positions)):
 			board.add_block(block_positions, block.get_color())
-			block = choice(blocks)(choice(colors))
+			block = get_block()
 			board.update()
 		block.render(screen)
 		board.render(screen)
-		pygame.display.flip()
+		pygame.display.update()
+		# fps.render()
+		fps.clock.tick(60)
 	pygame.quit()
