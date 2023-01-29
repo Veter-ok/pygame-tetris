@@ -44,14 +44,14 @@ class Board():
 
 	def update(self):
 		while [1] * self.width in self.board:
-			full_row = 0
 			for y, row in enumerate(self.board):
 				if row == [1] * self.width:
 					full_row = y
 					break
 			index = full_row
-			while index >= 0:
+			while index > 0:
 				self.board[index] = self.board[index - 1].copy()
+				self.board_colors[index] = self.board_colors[index - 1].copy()
 				index -= 1
 
 					
