@@ -29,14 +29,14 @@ def rightX(positions):
 
 
 class MainBlock():
-	def __init__(self, color:str | tuple):
+	def __init__(self, color:str):
 		self.color = color
 		self.direction = 1
 
 	def get_positions(self) -> list:
 		return self.positions
 	
-	def get_color(self) -> str | tuple:
+	def get_color(self) -> str:
 		return self.color
 
 	def render(self, screen):
@@ -218,7 +218,7 @@ class L_Block_2(MainBlock):
 			x, y = self.positions[1]
 			self.positions[0] = [x, y - 1]
 			self.positions[2] = [x, y + 1]
-			self.positions[3] = [x - 1, y + 1]
+			self.positions[3] = [x - 1, y - 1]
 			self.direction = 4
 		elif self.direction == 4:
 			x, y = self.positions[1]
@@ -320,7 +320,53 @@ class Z_Block_2(MainBlock):
 				self.positions[2] = [x - 1, y]
 				self.positions[3] = [x, y]
 			else:
-				self.positions[0] = [x - 1, y + 1]
+				self.positions[0] = [x - 1, y - 1]
 				self.positions[1] = [x, y + 1]
 				self.positions[3] = [x + 1, y]
+			self.direction = 1
+
+
+class T_Block(MainBlock):
+	color = (152, 2, 241)
+
+	def __init__(self):
+		super().__init__(T_Block.color)
+		self.positions = [(3, 1), (4, 1), (4, 0), (5, 1)]
+
+	def rotate(self):
+		if self.direction == 1:
+			x, y = self.positions[1]
+			self.positions[0] = [x, y - 1]
+			self.positions[2] = [x + 1, y]
+			self.positions[3] = [x, y + 1]
+			self.direction = 2
+		elif self.direction == 2:
+			x, y = self.positions[1]
+			if x == 0:
+				self.positions[0] = [x, y]
+				self.positions[1] = [x + 1, y]
+				self.positions[2] = [x + 1, y + 1]
+				self.positions[3] = [x + 2, y]
+			else:
+				self.positions[0] = [x - 1, y]
+				self.positions[2] = [x, y + 1]
+				self.positions[3] = [x + 1, y]
+			self.direction = 3
+		elif self.direction == 3:
+			x, y = self.positions[1]
+			self.positions[0] = [x, y - 1]
+			self.positions[2] = [x - 1, y]
+			self.positions[3] = [x, y + 1]
+			self.direction = 4
+		elif self.direction == 4:
+			x, y = self.positions[1]
+			if x == WIDTH - 1:
+				self.positions[0] = [x - 2, y + 1]
+				self.positions[1] = [x - 1, y]
+				self.positions[2] = [x - 1, y + 1]
+				self.positions[3] = [x, y + 1]
+			else:
+				self.positions[0] = [x - 1, y + 1]
+				self.positions[2] = [x, y + 1]
+				self.positions[3] = [x + 1, y + 1]
 			self.direction = 1
