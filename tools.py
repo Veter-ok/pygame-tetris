@@ -1,10 +1,10 @@
 import pygame
 from random import choice
-from blocks import Cube, Rectangle, L_Block_1, L_Block_2, Z_Block_1
+from blocks import Cube, Rectangle, L_Block_1, L_Block_2, Z_Block_1, Z_Block_2
 
-BLOCKS = [Cube, Rectangle, L_Block_1, L_Block_2, Z_Block_1]
-#BLOCKS = [Z_Block_1]
-Block = Rectangle | Cube | L_Block_1 | L_Block_2
+BLOCKS = [Cube, Rectangle, L_Block_1, L_Block_2, Z_Block_1, Z_Block_2]
+#BLOCKS = [Z_Block_2]
+Block = Rectangle | Cube | L_Block_1 | L_Block_2 | Z_Block_1 | Z_Block_2
 
 def get_block() -> Block: 
 	return choice(BLOCKS)()

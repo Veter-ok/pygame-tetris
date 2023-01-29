@@ -278,3 +278,49 @@ class Z_Block_1(MainBlock):
 				self.positions[2] = [x, y + 1]
 				self.positions[3] = [x + 1, y + 1]
 			self.direction = 1
+
+
+class Z_Block_2(MainBlock):
+	color = (0, 242, 1)
+
+	def __init__(self):
+		super().__init__(Z_Block_2.color)
+		self.positions = [(3, 1), (4, 1), (4, 0), (5, 0)]
+
+	def rotate(self):
+		if self.direction == 1:
+			x, y = self.positions[1]
+			self.positions[0] = [x, y - 1]
+			self.positions[2] = [x + 1, y]
+			self.positions[3] = [x + 1, y + 1]
+			self.direction = 2
+		elif self.direction == 2:
+			x, y = self.positions[1]
+			if x == 0:
+				self.positions[0] = [x, y]
+				self.positions[1] = [x + 1, y]
+				self.positions[2] = [x + 1, y - 1]
+				self.positions[3] = [x + 2, y - 1]
+			else:
+				self.positions[0] = [x - 1, y]
+				self.positions[2] = [x, y - 1]
+				self.positions[3] = [x + 1, y - 1]
+			self.direction = 3
+		elif self.direction == 3:
+			x, y = self.positions[2]
+			self.positions[0] = [x - 1, y - 1]
+			self.positions[1] = [x - 1, y]
+			self.positions[3] = [x, y + 1]
+			self.direction = 4
+		elif self.direction == 4:
+			x, y = self.positions[2]
+			if x == WIDTH - 1:
+				self.positions[0] = [x - 2, y + 1]
+				self.positions[1] = [x - 1, y + 1]
+				self.positions[2] = [x - 1, y]
+				self.positions[3] = [x, y]
+			else:
+				self.positions[0] = [x - 1, y + 1]
+				self.positions[1] = [x, y + 1]
+				self.positions[3] = [x + 1, y]
+			self.direction = 1
