@@ -1,15 +1,19 @@
 import pygame
 from constants import WIDTH, HEIGHT
 from board import Board
-from tools import get_block, TimeChecker, FPS
+from tools import get_block, TimeChecker, FPS, TitleText, MainText
 
 if __name__ == '__main__':
 	pygame.init()
-	screen = pygame.display.set_mode((450, 720))
+	screen = pygame.display.set_mode((700, 720))
 	board = Board(WIDTH, HEIGHT)
 	block = get_block()
 	speedChecker = TimeChecker()
 	fps = FPS()
+	title = TitleText(470, 60, "Tetris")
+	points_text = MainText(435, 200, "Points:")
+	lines_text = MainText(435, 250, "Lines:")
+	lvl_text = MainText(435, 300, "Level:")
 	running = True
 	while running:
 		for event in pygame.event.get():
@@ -34,7 +38,11 @@ if __name__ == '__main__':
 			board.update()
 		block.render(screen)
 		board.render(screen)
+		fps.render(screen)
+		title.render(screen)
+		lines_text.render(screen)
+		lvl_text.render(screen)
+		points_text.render(screen)
 		pygame.display.update()
-		# fps.render()
 		fps.clock.tick(60)
 	pygame.quit()
