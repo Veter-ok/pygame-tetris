@@ -42,8 +42,10 @@ class Board():
                     x * self.cell_size + self.left, y * self.cell_size + self.top, self.cell_size,
                     self.cell_size), 1)
 
-	def update(self):
+	def update(self) -> int:
+		rows = 0
 		while [1] * self.width in self.board:
+			rows += 1
 			for y, row in enumerate(self.board):
 				if row == [1] * self.width:
 					full_row = y
@@ -53,6 +55,7 @@ class Board():
 				self.board[index] = self.board[index - 1].copy()
 				self.board_colors[index] = self.board_colors[index - 1].copy()
 				index -= 1
+		return rows
 
 					
 	def add_block(self, postions:tuple, color:tuple | str):

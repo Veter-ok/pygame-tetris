@@ -43,6 +43,7 @@ class TimeChecker():
 		self.prev_tick = 0
 		self.sum_tick = 0
 		self.clock = pygame.time.Clock()
+		self.delay = 1000
 
 	def check_time(self) -> bool:
 		tick = self.clock.tick()
@@ -52,6 +53,9 @@ class TimeChecker():
 			return True
 		self.sum_tick += tick
 		return False
+	
+	def increase_speed(self, new_speed:int):
+		self.delay = self.delay / new_speed
 
 
 class FPS():
