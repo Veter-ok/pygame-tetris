@@ -44,12 +44,20 @@ class MainBlock():
 			pos = boardPosToPixels(position)
 			pygame.draw.rect(screen, self.color, (pos[0], pos[1], CELL_SIZE, CELL_SIZE))
 
-	def move(self, pos:str):
-		if pos == "RIGHT" and rightX(self.positions) + 1 < WIDTH:
+	def __is_edge(self, direction:str, edges:list[list[int]]):
+		for index, edge in enumerate(edges):
+			if direction == "LEFT" and abs(self.positions[index][0] - edge[0]) == 1:
+				pass
+			elif direction == "RIGHT" and abs(self.positions[index][0] - edge[1]) == 1:
+				return False
+		return True
+
+	def move(self, pos:str, edges:list[list[int]]=[]):
+		if pos == "RIGHT" and rightX(self.positions) + 1 < WIDTH and self.__is_edge(pos, edges):
 			for index in range(len(self.positions)):
 				x, y = self.positions[index]
 				self.positions[index] = (x + 1, y)
-		elif pos == "LEFT" and leftX(self.positions) > 0:
+		elif pos == "LEFT" and leftX(self.positions) > 0 and self.__is_edge(pos, edges):
 			for index in range(len(self.positions)):
 				x, y = self.positions[index]
 				self.positions[index] = (x - 1, y)

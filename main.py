@@ -21,10 +21,12 @@ if __name__ == '__main__':
 			if event.type == pygame.QUIT:
 				running = False
 			elif event.type == pygame.KEYDOWN:
+				block_positions = block.get_positions()
+				sideEdges = board.sidePoints(block_positions)
 				if event.key == pygame.K_RIGHT:
-					block.move("RIGHT")
+					block.move("RIGHT", sideEdges)
 				elif event.key == pygame.K_LEFT:
-					block.move("LEFT")
+					block.move("LEFT", sideEdges)
 				elif event.key == pygame.K_DOWN:
 					block.move("DOWN")
 				elif event.key == pygame.K_UP:

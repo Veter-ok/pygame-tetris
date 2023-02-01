@@ -64,9 +64,9 @@ class Board():
 			self.board[y][x] = 1
 			self.board_colors[y][x] = color
 	
-	def minPoints(self, postions: list[tuple]) -> list[int]:
+	def minPoints(self, positions: list[tuple]) -> list[int]:
 		min_points = []
-		for postion in postions:
+		for postion in positions:
 			x, y = postion
 			for new_y in range(y, self.height):
 				if self.board[new_y][x] == 1:
@@ -75,6 +75,19 @@ class Board():
 				if new_y == self.height - 1:
 					min_points.append(new_y)
 		return min_points
+	
+	def sidePoints(self, positions: list[tuple]) -> list[list[int]]:
+		side_points = [[0, self.width] for _ in range(4)]
+		for index, position in enumerate(positions):
+			x, y = position
+			for new_x in range(0, x):
+				if self.board[y][new_x] == 1 and new_x > side_points[index][0]:
+					side_points[index][0] = new_x
+			for new_x in range(x + 1, self.width):
+				if self.board[y][new_x] == 1 and new_x < side_points[index][1]:
+					side_points[index][1] = new_x
+		return side_points
+
 	
 	def fill_cell(self, screen, pos:type, color:str | tuple):
 		pos = boardPosToPixels(pos)
