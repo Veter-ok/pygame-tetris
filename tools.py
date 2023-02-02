@@ -47,15 +47,15 @@ class TimeChecker():
 
 	def check_time(self) -> bool:
 		tick = self.clock.tick()
-		if  (tick + self.sum_tick) - self.prev_tick >= 1000:
+		if  (tick + self.sum_tick) - self.prev_tick >= self.delay:
 			self.prev_tick = 0
 			self.sum_tick = 0
 			return True
 		self.sum_tick += tick
 		return False
 	
-	def increase_speed(self, new_speed:int):
-		self.delay = self.delay / new_speed
+	def increase_speed(self):
+		self.delay = self.delay * 0.75
 
 
 class FPS():

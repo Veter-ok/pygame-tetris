@@ -77,7 +77,7 @@ class Board():
 		return min_points
 	
 	def sidePoints(self, positions: list[tuple]) -> list[list[int]]:
-		side_points = [[0, self.width] for _ in range(4)]
+		side_points = [[-1, self.width] for _ in range(4)]
 		for index, position in enumerate(positions):
 			x, y = position
 			for new_x in range(0, x):

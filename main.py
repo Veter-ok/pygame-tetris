@@ -14,7 +14,7 @@ if __name__ == '__main__':
 	score_text = MainText(435, 200, "Score:")
 	lines_text = MainText(435, 250, "Lines:")
 	lvl_text = MainText(435, 300, "Level:")
-	score, rows, lvl = 0, 0, 0
+	score, rows, lvl = 0, 0, 1
 	running = True
 	while running:
 		for event in pygame.event.get():
@@ -35,13 +35,19 @@ if __name__ == '__main__':
 		if speedChecker.check_time():
 			block.fall()
 		block_positions = block.get_positions()
-		if block.isFall(board.minPoints(block_positions)):
+		min_points = board.minPoints(block_positions)
+		if max(min_points) == 1:
+			running = False
+		if block.isFall(min_points):
 			board.add_block(block_positions, block.get_color())
 			block = get_block()
 			new_rows = board.update()
 			if new_rows:
 				rows += new_rows
 				score += SCORE[new_rows]
+				if lvl * 1000 <= score:
+					lvl += 1
+					speedChecker.increase_speed()
 		block.render(screen)
 		board.render(screen)
 		fps.render(screen)

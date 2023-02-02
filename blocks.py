@@ -13,20 +13,6 @@ def minY(positions):
 			miny = position[1]
 	return miny
 
-def leftX(positions):
-	leftx = WIDTH
-	for position in positions:
-		if position[0] < leftx:
-			leftx = position[0]
-	return leftx
-
-def rightX(positions):
-	rightx = 0
-	for position in positions:
-		if position[0] > rightx:
-			rightx = position[0]
-	return rightx
-
 
 class MainBlock():
 	def __init__(self, color:str):
@@ -47,17 +33,17 @@ class MainBlock():
 	def __is_edge(self, direction:str, edges:list[list[int]]):
 		for index, edge in enumerate(edges):
 			if direction == "LEFT" and abs(self.positions[index][0] - edge[0]) == 1:
-				pass
+				return False
 			elif direction == "RIGHT" and abs(self.positions[index][0] - edge[1]) == 1:
 				return False
 		return True
 
 	def move(self, pos:str, edges:list[list[int]]=[]):
-		if pos == "RIGHT" and rightX(self.positions) + 1 < WIDTH and self.__is_edge(pos, edges):
+		if pos == "RIGHT" and self.__is_edge(pos, edges):
 			for index in range(len(self.positions)):
 				x, y = self.positions[index]
 				self.positions[index] = (x + 1, y)
-		elif pos == "LEFT" and leftX(self.positions) > 0 and self.__is_edge(pos, edges):
+		elif pos == "LEFT" and self.__is_edge(pos, edges):
 			for index in range(len(self.positions)):
 				x, y = self.positions[index]
 				self.positions[index] = (x - 1, y)
@@ -328,7 +314,7 @@ class Z_Block_2(MainBlock):
 				self.positions[2] = [x - 1, y]
 				self.positions[3] = [x, y]
 			else:
-				self.positions[0] = [x - 1, y - 1]
+				self.positions[0] = [x - 1, y + 1]
 				self.positions[1] = [x, y + 1]
 				self.positions[3] = [x + 1, y]
 			self.direction = 1
