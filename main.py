@@ -3,58 +3,74 @@ from constants import WIDTH, HEIGHT, SCORE
 from board import Board
 from tools import get_block, TimeChecker, FPS, TitleText, MainText
 
-if __name__ == '__main__':
-	pygame.init()
-	screen = pygame.display.set_mode((700, 720))
-	board = Board(WIDTH, HEIGHT)
-	block = get_block()
-	speedChecker = TimeChecker()
-	fps = FPS()
-	title = TitleText(470, 60, "Tetris")
-	score_text = MainText(435, 200, "Score:")
-	lines_text = MainText(435, 250, "Lines:")
-	lvl_text = MainText(435, 300, "Level:")
-	score, rows, lvl = 0, 0, 1
-	running = True
-	while running:
+
+class App():
+	def __init__(self):
+		pygame.init()
+		self.screen = pygame.display.set_mode((700, 720))
+		self.score, self.rows, self.lvl = 0, 0, 1
+		self.speedChecker = TimeChecker()
+		self.title = TitleText(470, 60, "Tetris")
+		self.score_text = MainText(435, 200, "Score:")
+		self.lines_text = MainText(435, 250, "Lines:")
+		self.lvl_text = MainText(435, 300, "Level:")
+		self.fps = FPS()
+		self.board = Board(WIDTH, HEIGHT)
+		self.block = get_block()
+	
+	def check_events(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				running = False
+				pygame.quit()
 			elif event.type == pygame.KEYDOWN:
-				block_positions = block.get_positions()
-				sideEdges = board.sidePoints(block_positions)
+				block_positions = self.block.get_positions()
+				sideEdges = self.board.sidePoints(block_positions)
 				if event.key == pygame.K_RIGHT:
-					block.move("RIGHT", sideEdges)
+					self.block.move("RIGHT", sideEdges)
 				elif event.key == pygame.K_LEFT:
-					block.move("LEFT", sideEdges)
+					self.block.move("LEFT", sideEdges)
 				elif event.key == pygame.K_DOWN:
-					block.move("DOWN")
+					self.block.move("DOWN")
 				elif event.key == pygame.K_UP:
-					block.rotate()
-		screen.fill("black")
-		if speedChecker.check_time():
-			block.fall()
-		block_positions = block.get_positions()
-		min_points = board.minPoints(block_positions)
-		if max(min_points) == 1:
-			running = False
-		if block.isFall(min_points):
-			board.add_block(block_positions, block.get_color())
-			block = get_block()
-			new_rows = board.update()
+					self.block.rotate() 
+		
+	def update(self):
+		self.screen.fill("black")
+		if self.speedChecker.check_time():
+			self.block.fall()
+		block_positions = self.block.get_positions()
+		min_points = self.board.minPoints(block_positions)
+		if self.block.isFall(min_points):
+			if min(min_points) == 1:
+				pygame.quit()
+			self.board.add_block(block_positions, self.block.get_color())
+			self.block = get_block()
+			new_rows = self.board.update()
 			if new_rows:
-				rows += new_rows
-				score += SCORE[new_rows]
-				if lvl * 1000 <= score:
-					lvl += 1
-					speedChecker.increase_speed()
-		block.render(screen)
-		board.render(screen)
-		fps.render(screen)
-		title.render(screen)
-		lines_text.render(screen, f"Lines: {rows}")
-		score_text.render(screen,  f"Score: {score}")
-		lvl_text.render(screen, f"Level: {lvl}")
+				self.rows += new_rows
+				self.score += SCORE[new_rows]
+				if self.lvl * 1000 <= self.score:
+					self.lvl += 1
+					self.speedChecker.increase_speed()
+
+	def draw(self):
+		self.block.render(self.screen)
+		self.board.render(self.screen)
+		self.fps.render(self.screen)
+		self.title.render(self.screen)
+		self.lines_text.render(self.screen, f"Lines: {self.rows}")
+		self.score_text.render(self.screen,  f"Score: {self.score}")
+		self.lvl_text.render(self.screen, f"Level: {self.lvl}")
 		pygame.display.update()
-		fps.clock.tick(60)
-	pygame.quit()
+		self.fps.clock.tick(60)
+	
+	def run(self):
+		while True:
+			self.check_events()
+			self.update()
+			self.draw()
+
+
+if __name__ == '__main__':
+	app = App()
+	app.run()
