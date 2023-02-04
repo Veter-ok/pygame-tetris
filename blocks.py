@@ -1,12 +1,12 @@
 import pygame
 from constants import MARGIN_LEFT, MARGIN_TOP, CELL_SIZE, HEIGHT, WIDTH
 
-def boardPosToPixels(pos):
+def boardPosToPixels(pos:list[int]):
 	left, top, cell_size = MARGIN_LEFT, MARGIN_TOP, CELL_SIZE
 	x, y = pos
 	return (x * cell_size + left, y * cell_size + top)
 
-def minY(positions):
+def minY(positions: list[list[int]]) -> int:
 	miny = 0
 	for position in positions:
 		if position[1] > miny:
@@ -14,7 +14,7 @@ def minY(positions):
 	return miny
 
 
-class MainBlock():
+class Tetromino():
 	def __init__(self, color:str):
 		self.color = color
 		self.direction = 1
@@ -58,6 +58,12 @@ class MainBlock():
 				x, y = self.positions[index]
 				self.positions[index] = (x, y + 1)
 	
+	def fast_down(self, min_point):
+		moving = min_point - minY(self.positions)
+		for index in range(len(self.positions)):
+			x, y = self.positions[index]
+			self.positions[index] = [x, y + moving]
+
 	def isFall(self, all_y:list) -> bool:
 		for index, pos in enumerate(self.positions):
 			if all_y[index] == pos[1]:
@@ -65,7 +71,7 @@ class MainBlock():
 		return False
 
 
-class Cube(MainBlock):
+class Cube(Tetromino):
 	color = (242, 240, 0)
 
 	def __init__(self): 
@@ -76,7 +82,7 @@ class Cube(MainBlock):
 		pass
 
 
-class Rectangle(MainBlock):
+class Rectangle(Tetromino):
 	color = (4, 241, 229)
 
 	def __init__(self):
@@ -136,7 +142,7 @@ class Rectangle(MainBlock):
 			self.direction = 1
 
 
-class L_Block_1(MainBlock):
+class L_Block_1(Tetromino):
 	color = (26, 0, 217)
 
 	def __init__(self):
@@ -182,7 +188,7 @@ class L_Block_1(MainBlock):
 			self.direction = 1
 
 
-class L_Block_2(MainBlock):
+class L_Block_2(Tetromino):
 	color = (214, 144, 5)
 
 	def __init__(self):
@@ -228,7 +234,7 @@ class L_Block_2(MainBlock):
 			self.direction = 1
 
 
-class Z_Block_1(MainBlock):
+class Z_Block_1(Tetromino):
 	color = (240, 1, 1)
 
 	def __init__(self):
@@ -274,7 +280,7 @@ class Z_Block_1(MainBlock):
 			self.direction = 1
 
 
-class Z_Block_2(MainBlock):
+class Z_Block_2(Tetromino):
 	color = (0, 242, 1)
 
 	def __init__(self):
@@ -320,7 +326,7 @@ class Z_Block_2(MainBlock):
 			self.direction = 1
 
 
-class T_Block(MainBlock):
+class T_Block(Tetromino):
 	color = (152, 2, 241)
 
 	def __init__(self):

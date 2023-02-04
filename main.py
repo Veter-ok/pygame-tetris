@@ -31,6 +31,9 @@ class App():
 					self.block.move("LEFT", sideEdges)
 				elif event.key == pygame.K_DOWN:
 					self.block.move("DOWN")
+				elif event.key == pygame.K_SPACE:
+					min_points = self.board.minPoints(block_positions) 
+					self.block.fast_down(min(min_points))
 				elif event.key == pygame.K_UP:
 					self.block.rotate() 
 		
