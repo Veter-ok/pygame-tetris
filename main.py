@@ -9,6 +9,7 @@ class App():
 		pygame.init()
 		self.screen = pygame.display.set_mode((700, 720))
 		self.score, self.rows, self.lvl = 0, 0, 1
+		self.running = True
 		self.speedChecker = TimeChecker()
 		self.title = TitleText(470, 60, "Tetris")
 		self.score_text = MainText(435, 200, "Score:")
@@ -21,7 +22,7 @@ class App():
 	def check_events(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				pygame.quit()
+				self.running = False
 			elif event.type == pygame.KEYDOWN:
 				block_positions = self.block.get_positions()
 				sideEdges = self.board.sidePoints(block_positions)
@@ -45,7 +46,7 @@ class App():
 		min_points = self.board.minPoints(block_positions)
 		if self.block.isFall(min_points):
 			if min(min_points) == 1:
-				pygame.quit()
+				self.running = False
 			self.board.add_block(block_positions, self.block.get_color())
 			self.block = get_block()
 			new_rows = self.board.update()
@@ -68,7 +69,7 @@ class App():
 		self.fps.clock.tick(60)
 	
 	def run(self):
-		while True:
+		while self.running:
 			self.check_events()
 			self.update()
 			self.draw()
