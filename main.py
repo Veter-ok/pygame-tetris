@@ -1,15 +1,15 @@
 import pygame
 from constants import WIDTH, HEIGHT, SCORE
 from board import Board
-from tools import get_block, TimeChecker, FPS, TitleText, MainText
+from tools import get_block, Input, TimeChecker, FPS, TitleText, MainText
 
 class App():
 	def __init__(self):
 		pygame.init()
 		self.screen = pygame.display.set_mode((700, 720))
 		self.score, self.rows, self.lvl = 0, 0, 1
-		self.running = True
-		self.gameIsStart, self.gameIsDefeat = False, False
+		self.running, self.gameIsStart, self.gameIsDefeat = True, False, False
+		self.userName = ''
 		self.speedChecker = TimeChecker()
 		self.title = TitleText(470, 60, "Tetris")
 		self.score_text = MainText(435, 200, "Score:")
@@ -17,6 +17,7 @@ class App():
 		self.lvl_text = MainText(435, 300, "Level:")
 		self.label = TitleText(280, 200, "Tetris")
 		self.tip = MainText(270, 350, "Tap space to play")
+		self.input = Input(250, 290)
 		self.fps = FPS()
 		self.board = Board(WIDTH, HEIGHT)
 		self.block = get_block()
@@ -44,9 +45,14 @@ class App():
 						self.lines_text.setPosition(435, 250)
 						self.lvl_text.setPosition(435, 300)
 						self.score, self.rows, self.lvl = 0, 0, 1
+						self.userName = self.input.get_text()
 						self.gameIsStart, self.gameIsDefeat = True, False
 				elif event.key == pygame.K_UP:
 					self.block.rotate() 
+				elif event.key == pygame.K_BACKSPACE and not self.gameIsStart:
+					self.input.delete()
+				elif not self.gameIsStart:
+					self.input.add_symbol(event.unicode)
 		
 	def update(self):
 		self.screen.fill("black")
@@ -94,9 +100,10 @@ class App():
 					self.lines_text.render(self.screen, f"Lines: {self.rows}")
 					self.score_text.render(self.screen,  f"Score: {self.score}")
 					self.lvl_text.render(self.screen, f"Level: {self.lvl}")
+				else:
+					self.input.render(self.screen)
 			pygame.display.update()
 			self.fps.clock.tick(60)
-
 
 
 if __name__ == '__main__':

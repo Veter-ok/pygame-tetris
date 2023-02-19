@@ -10,6 +10,33 @@ def get_block() -> Block:
 	return choice(BLOCKS)()
 
 
+class Input():
+	def __init__(self, x:int, y:int):
+		self.x = x
+		self.y = y
+		self.input_rect = pygame.Rect(x, y, 200, 42)
+		self.base_font = pygame.font.SysFont("Arial", 24)
+		self.text = ''
+	
+	def get_text(self) -> str:
+		return self.text
+
+	def add_symbol(self, symbol:str):
+		if len(self.text) < 15:
+			self.text += symbol
+	
+	def delete(self):
+		self.text = self.text[:-1]
+	
+	def render(self, screen):
+		pygame.draw.rect(screen, (255, 255, 0), self.input_rect, 1)
+		if self.text == '':
+			text_surface = self.base_font.render('Enter your name', True, (255, 255, 255))
+		else:
+			text_surface = self.base_font.render(self.text, True, (255, 255, 255))
+		screen.blit(text_surface, (self.x + 9, self.y + 9))
+
+
 class TitleText():
 	def __init__(self, x:int, y:int, text:str):
 		self.font = pygame.font.SysFont("Arial", 50)
