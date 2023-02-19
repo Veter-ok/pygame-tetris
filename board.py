@@ -22,6 +22,10 @@ class Board():
 		self.left = left
 		self.top = top
 		self.cell_size = cell_size
+	
+	def reset_board(self):
+		self.board = [[0] * self.width for _ in range(self.height)]
+		self.board_colors = [[0] * self.width for _ in range(self.height)]
 
 	def get_cell(self, mouse_pos:tuple) -> None | type:
 		x, y = mouse_pos

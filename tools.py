@@ -1,4 +1,5 @@
 import pygame
+import os
 from random import choice
 from blocks import Cube, Rectangle, L_Block_1, L_Block_2, Z_Block_1, Z_Block_2, T_Block
 
@@ -7,6 +8,7 @@ Block = Rectangle | Cube | L_Block_1 | L_Block_2 | Z_Block_1 | Z_Block_2 | T_Blo
 
 def get_block() -> Block: 
 	return choice(BLOCKS)()
+
 
 class TitleText():
 	def __init__(self, x:int, y:int, text:str):
@@ -36,6 +38,10 @@ class MainText():
 		else:
 			self.text = self.font.render(self.default_text, True, (255, 255, 255))
 		screen.blit(self.text, (self.x, self.y))
+	
+	def setPosition(self, x:int, y:int):
+		self.x = x
+		self.y = y
 
 
 class TimeChecker():
