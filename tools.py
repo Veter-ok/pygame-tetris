@@ -1,5 +1,5 @@
 import pygame
-import os
+import sqlite3
 from random import choice
 from blocks import Cube, Rectangle, L_Block_1, L_Block_2, Z_Block_1, Z_Block_2, T_Block
 
@@ -69,6 +69,9 @@ class MainText():
 	def setPosition(self, x:int, y:int):
 		self.x = x
 		self.y = y
+	
+	def setText(self, text:str):
+		self.default_text = text
 
 
 class TimeChecker():
@@ -98,3 +101,33 @@ class FPS():
 
 	def render(self, screen):
 		self.text.render(screen, str(round(self.clock.get_fps(),2)))
+
+
+class DB_Controller:
+	def __init__(self):
+		self.connection = sqlite3.connect("Pygame.db")
+		self.cursor = self.connection.cursor()
+		self.__createTables()
+		print(self.cursor.execute("SELECT * FROM users").fetchall())
+		
+	def __createTables(self):
+		self.cursor.execute("""CREATE TABLE IF NOT EXISTS "users" (
+								"nickname"	TEXT NOT NULL UNIQUE,
+								"record" INTEGER  NOT NULL
+							);""")
+	
+	def addUser(self, nickname:str):
+		try:
+			self.cursor.execute("""INSERT INTO users(nickname, record) VALUES(?, ?)""", (nickname, 0, ))
+			self.nickname = nickname
+			self.connection.commit()
+		except sqlite3.IntegrityError:
+			self.nickname = nickname
+	
+	def getRecord(self) -> int:
+		record = self.cursor.execute("SELECT record FROM users WHERE nickname=?", (self.nickname, )).fetchall()
+		return record[0][0]
+
+	def changeRecord(self, new_record:int):
+		self.cursor.execute("UPDATE users SET record=? WHERE nickname=?", (new_record, self.nickname))
+		self.connection.commit()

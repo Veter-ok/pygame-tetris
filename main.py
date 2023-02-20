@@ -1,21 +1,23 @@
 import pygame
 from constants import WIDTH, HEIGHT, SCORE
 from board import Board
-from tools import get_block, Input, TimeChecker, FPS, TitleText, MainText
+from tools import get_block, Input, TimeChecker, FPS, TitleText, MainText, DB_Controller
 
 class App():
 	def __init__(self):
 		pygame.init()
 		self.screen = pygame.display.set_mode((700, 720))
-		self.score, self.rows, self.lvl = 0, 0, 1
+		self.record, self.score, self.rows, self.lvl = 0, 0, 0, 1
 		self.running, self.gameIsStart, self.gameIsDefeat = True, False, False
 		self.userName = ''
 		self.speedChecker = TimeChecker()
+		self.dataBase = DB_Controller()
 		self.title = TitleText(470, 60, "Tetris")
-		self.score_text = MainText(435, 200, "Score:")
-		self.lines_text = MainText(435, 250, "Lines:")
-		self.lvl_text = MainText(435, 300, "Level:")
-		self.label = TitleText(280, 200, "Tetris")
+		self.record_text = MainText(435, 200, "Record:")
+		self.score_text = MainText(435, 250, "Score:")
+		self.lines_text = MainText(435, 300, "Lines:") 
+		self.lvl_text = MainText(435, 350, "Level:")
+		self.label = TitleText(280, 150, "Tetris")
 		self.tip = MainText(270, 350, "Tap space to play")
 		self.input = Input(250, 290)
 		self.fps = FPS()
@@ -41,15 +43,18 @@ class App():
 						self.block.fast_down(min(min_points))
 					else:
 						self.board.reset_board()
-						self.score_text.setPosition(435, 200)
-						self.lines_text.setPosition(435, 250)
-						self.lvl_text.setPosition(435, 300)
+						self.record_text.setPosition(435, 200)
+						self.score_text.setPosition(435, 250)
+						self.lines_text.setPosition(435, 300)
+						self.lvl_text.setPosition(435, 350)
 						self.score, self.rows, self.lvl = 0, 0, 1
 						self.userName = self.input.get_text()
+						self.dataBase.addUser(self.userName)
+						self.record = self.dataBase.getRecord()
 						self.gameIsStart, self.gameIsDefeat = True, False
 				elif event.key == pygame.K_UP:
 					self.block.rotate() 
-				elif event.key == pygame.K_BACKSPACE and not self.gameIsStart:
+				elif event.key == pygame.K_BACKSPACE and not self.gameIsStart and not self.gameIsDefeat:
 					self.input.delete()
 				elif not self.gameIsStart:
 					self.input.add_symbol(event.unicode)
@@ -62,11 +67,15 @@ class App():
 		min_points = self.board.minPoints(block_positions)
 		if self.block.isFall(min_points):
 			if min(min_points) <= 1:
-				self.lines_text.setPosition(205, 300)
-				self.score_text.setPosition(305, 300)
-				self.lvl_text.setPosition(405, 300)
-				self.tip.setPosition(270, 370)
+				self.record_text.setPosition(300, 250)
+				self.lines_text.setPosition(300, 300)
+				self.score_text.setPosition(300, 350)
+				self.lvl_text.setPosition(300, 400)
+				self.tip.setPosition(270, 470)
 				self.gameIsStart, self.gameIsDefeat = False, True
+				if self.score > self.dataBase.getRecord():
+					self.dataBase.changeRecord(self.score)
+					self.record = self.score
 			self.board.add_block(block_positions, self.block.get_color())
 			self.block = get_block()
 			new_rows = self.board.update()
@@ -82,6 +91,7 @@ class App():
 		self.board.render(self.screen)
 		self.fps.render(self.screen)
 		self.title.render(self.screen)
+		self.record_text.render(self.screen, f"Record: {self.record}")
 		self.lines_text.render(self.screen, f"Lines: {self.rows}")
 		self.score_text.render(self.screen,  f"Score: {self.score}")
 		self.lvl_text.render(self.screen, f"Level: {self.lvl}")
@@ -97,6 +107,7 @@ class App():
 				self.label.render(self.screen)
 				self.tip.render(self.screen)
 				if self.gameIsDefeat:
+					self.record_text.render(self.screen, f"Record: {self.record}")
 					self.lines_text.render(self.screen, f"Lines: {self.rows}")
 					self.score_text.render(self.screen,  f"Score: {self.score}")
 					self.lvl_text.render(self.screen, f"Level: {self.lvl}")
