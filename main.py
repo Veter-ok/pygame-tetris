@@ -1,7 +1,7 @@
 import pygame
 from constants import WIDTH, HEIGHT, SCORE
 from board import Board
-from tools import get_block, Input, TimeChecker, FPS, TitleText, MainText, DB_Controller
+from tools import load_image, get_block, Input, TimeChecker, FPS, TitleText, MainText, DB_Controller
 
 class App():
 	def __init__(self):
@@ -12,12 +12,13 @@ class App():
 		self.userName = ''
 		self.speedChecker = TimeChecker()
 		self.dataBase = DB_Controller()
+		self.label_img = load_image('logo.jpg')
+		self.logo_img = pygame.transform.scale(self.label_img, (700, 392))
 		self.title = TitleText(470, 60, "Tetris")
 		self.record_text = MainText(435, 200, "Record:")
 		self.score_text = MainText(435, 250, "Score:")
 		self.lines_text = MainText(435, 300, "Lines:") 
 		self.lvl_text = MainText(435, 350, "Level:")
-		self.label = TitleText(280, 150, "Tetris")
 		self.tip = MainText(270, 350, "Tap space to play")
 		self.input = Input(250, 290)
 		self.fps = FPS()
@@ -67,11 +68,11 @@ class App():
 		min_points = self.board.minPoints(block_positions)
 		if self.block.isFall(min_points):
 			if min(min_points) <= 1:
-				self.record_text.setPosition(300, 250)
-				self.lines_text.setPosition(300, 300)
-				self.score_text.setPosition(300, 350)
-				self.lvl_text.setPosition(300, 400)
-				self.tip.setPosition(270, 470)
+				self.record_text.setPosition(300, 300)
+				self.lines_text.setPosition(300, 350)
+				self.score_text.setPosition(300, 400)
+				self.lvl_text.setPosition(300, 450)
+				self.tip.setPosition(270, 520)
 				self.gameIsStart, self.gameIsDefeat = False, True
 				if self.score > self.dataBase.getRecord():
 					self.dataBase.changeRecord(self.score)
@@ -104,7 +105,7 @@ class App():
 				self.draw()
 			else:
 				self.screen.fill("black")
-				self.label.render(self.screen)
+				self.screen.blit(self.logo_img, (0, 0))
 				self.tip.render(self.screen)
 				if self.gameIsDefeat:
 					self.record_text.render(self.screen, f"Record: {self.record}")

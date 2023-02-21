@@ -1,4 +1,5 @@
 import pygame
+import os
 import sqlite3
 from random import choice
 from blocks import Cube, Rectangle, L_Block_1, L_Block_2, Z_Block_1, Z_Block_2, T_Block
@@ -8,6 +9,19 @@ Block = Rectangle | Cube | L_Block_1 | L_Block_2 | Z_Block_1 | Z_Block_2 | T_Blo
 
 def get_block() -> Block: 
 	return choice(BLOCKS)()
+
+def load_image(name, color_key=None):
+    fullname = os.path.join('imgs', name)
+    try:
+        image = pygame.image.load(fullname)
+    except pygame.error as message:
+        raise SystemExit(message)
+    image = image.convert_alpha()
+    if color_key is not None:
+        if color_key is -1:
+            color_key = image.get_at((0, 0))
+        image.set_colorkey(color_key)
+    return image
 
 
 class Input():
