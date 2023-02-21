@@ -9,11 +9,9 @@ class App():
 		self.screen = pygame.display.set_mode((700, 720))
 		self.record, self.score, self.rows, self.lvl = 0, 0, 0, 1
 		self.running, self.gameIsStart, self.gameIsDefeat = True, False, False
-		self.userName = ''
 		self.speedChecker = TimeChecker()
 		self.dataBase = DB_Controller()
-		self.label_img = load_image('logo.jpg')
-		self.logo_img = pygame.transform.scale(self.label_img, (700, 392))
+		self.logo_img = pygame.transform.scale(load_image('logo.jpg'), (700, 392))
 		self.title = TitleText(470, 60, "Tetris")
 		self.record_text = MainText(435, 200, "Record:")
 		self.score_text = MainText(435, 250, "Score:")
@@ -49,15 +47,14 @@ class App():
 						self.lines_text.setPosition(435, 300)
 						self.lvl_text.setPosition(435, 350)
 						self.score, self.rows, self.lvl = 0, 0, 1
-						self.userName = self.input.get_text()
-						self.dataBase.addUser(self.userName)
+						self.dataBase.addUser(self.input.get_text())
 						self.record = self.dataBase.getRecord()
 						self.gameIsStart, self.gameIsDefeat = True, False
 				elif event.key == pygame.K_UP:
 					self.block.rotate() 
 				elif event.key == pygame.K_BACKSPACE and not self.gameIsStart and not self.gameIsDefeat:
 					self.input.delete()
-				elif not self.gameIsStart:
+				elif not self.gameIsStart and not self.gameIsDefeat:
 					self.input.add_symbol(event.unicode)
 		
 	def update(self):
