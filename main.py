@@ -6,6 +6,7 @@ from tools import load_image, get_block, Input, TimeChecker, FPS, TitleText, Mai
 class App():
 	def __init__(self):
 		pygame.init()
+		pygame.display.set_caption("Tetris")
 		self.screen = pygame.display.set_mode((700, 720))
 		self.record, self.score, self.rows, self.lvl = 0, 0, 0, 1
 		self.running, self.gameIsStart, self.gameIsDefeat = True, False, False

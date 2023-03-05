@@ -18,7 +18,7 @@ def load_image(name, color_key=None):
         raise SystemExit(message)
     image = image.convert_alpha()
     if color_key is not None:
-        if color_key is -1:
+        if color_key == -1:
             color_key = image.get_at((0, 0))
         image.set_colorkey(color_key)
     return image
@@ -122,7 +122,6 @@ class DB_Controller:
 		self.connection = sqlite3.connect("Pygame.db")
 		self.cursor = self.connection.cursor()
 		self.__createTables()
-		print(self.cursor.execute("SELECT * FROM users").fetchall())
 		
 	def __createTables(self):
 		self.cursor.execute("""CREATE TABLE IF NOT EXISTS "users" (
